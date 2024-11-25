@@ -69,7 +69,7 @@ export default function Login() {
 					>
 						Create a new account?{' '}
 					</Text>
-					<Link href={'/'}>
+					<Link href={'/singup'}>
 						<Text
 							style={{
 								fontFamily: 'Inter',
