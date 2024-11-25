@@ -9,10 +9,16 @@ import {
 } from 'react-native'
 
 export default function Login() {
+	const inputElems = [
+		{ label: 'Username', value: 'email', isSecure: false },
+		{ label: 'Password', value: 'password', isSecure: true },
+	]
+
 	const [user, setUser] = useState({ email: '', password: '' })
 	const response = (value: any, tag: any) => {
 		setUser({ ...user, [tag]: value })
 	}
+
 	return (
 		<>
 			<View
@@ -35,21 +41,16 @@ export default function Login() {
 					<Text style={styles.titleSmall}>Login with Username & password</Text>
 				</View>
 				<View style={styles.wrapperInp}>
-					<View style={{ gap: 12 }}>
-						<Text style={styles.titleBtn}>Username</Text>
-						<TextInput
-							style={styles.inp}
-							onChangeText={value => response(value, 'email')}
-						></TextInput>
-					</View>
-					<View style={{ gap: 12 }}>
-						<Text style={styles.titleBtn}>Password</Text>
-						<TextInput
-							style={styles.inp}
-							secureTextEntry={true}
-							onChangeText={value => response(value, 'password')}
-						></TextInput>
-					</View>
+					{inputElems.map((elem, index) => (
+						<View key={index} style={{ gap: 12 }}>
+							<Text style={styles.titleBtn}>{elem.label}</Text>
+							<TextInput
+								style={styles.inp}
+								secureTextEntry={elem.isSecure}
+								onChangeText={value => response(value, elem.value)}
+							/>
+						</View>
+					))}
 					<TouchableOpacity
 						style={styles.btn}
 						onPress={() => console.log(user)}
