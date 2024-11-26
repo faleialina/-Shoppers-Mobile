@@ -1,4 +1,4 @@
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
 	StyleSheet,
@@ -15,8 +15,20 @@ export default function Login() {
 	]
 
 	const [user, setUser] = useState({ email: '', password: '' })
+
+	const router = useRouter()
 	const response = (value: any, tag: any) => {
 		setUser({ ...user, [tag]: value })
+	}
+
+	const authentication = () => {
+		try {
+			if (!user.email || !user.password) throw new Error('пустое значение')
+			if (user.password.length < 8) throw new Error('пароль менее 8 символов')
+			router.push('/products')
+		} catch (error: any) {
+			console.error(error.message)
+		}
 	}
 
 	return (
@@ -55,7 +67,9 @@ export default function Login() {
 						style={styles.btn}
 						onPress={() => console.log(user)}
 					>
-						<Text style={styles.titleSing}>SIGN IN</Text>
+						<Text style={styles.titleSing} onPress={authentication}>
+							SIGN IN
+						</Text>
 					</TouchableOpacity>
 				</View>
 
