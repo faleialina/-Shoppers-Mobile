@@ -1,4 +1,3 @@
-import ImgBack from '@/assets/images/ImgBack'
 import Header from '@/components/header'
 import { useRouter } from 'expo-router'
 import React from 'react'
@@ -17,12 +16,6 @@ function Products() {
 					<Text style={styles.titleSing}>SIGN OUT</Text>{' '}
 				</TouchableOpacity>
 			</View>
-			<TouchableOpacity
-				style={{ marginLeft: '10%' }}
-				onPress={() => router.back()}
-			>
-				<ImgBack />
-			</TouchableOpacity>
 		</View>
 	)
 }
