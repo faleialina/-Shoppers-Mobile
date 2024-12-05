@@ -11,7 +11,7 @@ function Products() {
 			<Header />
 			<View style={styles.wrapper}>
 				<Text style={styles.text}>Hello SIlva</Text>
-				<TouchableOpacity style={styles.btn}>
+				<TouchableOpacity style={styles.btn} onPress={() => router.replace('/')}>
 					{' '}
 					<Text style={styles.titleSing}>SIGN OUT</Text>{' '}
 				</TouchableOpacity>
