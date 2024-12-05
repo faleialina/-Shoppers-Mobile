@@ -7,68 +7,65 @@ import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import storage from '../../storage/index'
 
-function Detail() {
-	const router = useRouter()
+export default function Detail() {
 	const params: any = useLocalSearchParams()
+	const router = useRouter()
 	const [product, setProduct] = useState<any>([])
-	const [bascet, setBascet] = useState<any>([])
 
 	useEffect(() => {
-		const filterItem = storage.filter(el => el.id == params.id)
-		setProduct(filterItem)
-	}, [params.id])
+		const filterStorage = storage.filter(el => el.id == params.id)
+		setProduct(filterStorage)
+	}, [])
 
-	const addToBasket = () => {
+	const addBascet = () => {
 		arrBascet.push(product[0])
-		router.replace(`/(tabs)/cart`)
+		router.replace('/(tabs)/cart')
 	}
+
 	return (
-		<View
-			style={{
-				gap: 30,
-			}}
-		>
-			<View>
-				<Product width={'100%'} height={390} />
-				<View
-					style={{
-						position: 'absolute',
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						width: '90%',
-						marginLeft: 30,
-						marginTop: 52,
-					}}
-				>
-					<ImgBack onPress={() => router.replace('/(tabs)/products')} />
-					<Share />
+		<>
+			<View style={{ gap: 40, alignItems: 'center' }}>
+				<View>
+					<Product width={'100%'} height={390} />
+					<View
+						style={{
+							position: 'absolute',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '90%',
+							marginTop: 52,
+							marginLeft: 15,
+						}}
+					>
+						<TouchableOpacity onPress={() => router.replace('/products')}>
+							<ImgBack />
+						</TouchableOpacity>
+						<Share />
+					</View>
 				</View>
+
 				<View
 					style={{
 						gap: 14,
-						marginBottom: 38,
-						width: '90%',
+						marginBottom: 30,
+						width: '80%',
 						alignSelf: 'center',
 					}}
 				>
 					<Text style={styles.text}>{product[0]?.title}</Text>
-					<Text style={styles.text}>Rs. {product[0]?.price}</Text>
+					<Text style={styles.text}>Rs.{product[0]?.price}</Text>
 				</View>
-				<TouchableOpacity style={styles.btn} onPress={addToBasket}>
-					<Text style={styles.text}>Add to Cart</Text>
+
+				<TouchableOpacity style={styles.btn} onPress={addBascet}>
+					{' '}
+					<Text style={styles.titleSing}>Add to Cart</Text>{' '}
 				</TouchableOpacity>
-				<View
-					style={{
-						gap: 14,
-						marginBottom: 38,
-						width: '90%',
-						alignSelf: 'center',
-					}}
-				>
+
+				<View style={{ width: '90%', gap: 16 }}>
 					<Text style={{ ...styles.titleSing, color: '#000000' }}>
 						More Details
 					</Text>
-					<Text style={styles.text}>
+					<Text style={styles.textInfo}>
 						Gear up with the latest collections from adidas Originals, Running,
 						Football, Training. With over 20,000+ products, you will never run
 						out of choice. Grab your favorites now. Secure Payments. 100%
@@ -76,10 +73,16 @@ function Detail() {
 					</Text>
 				</View>
 			</View>
-		</View>
+		</>
 	)
 }
+
 const styles = StyleSheet.create({
+	text: {
+		fontFamily: 'Inter',
+		fontSize: 20,
+		fontWeight: 600,
+	},
 	btn: {
 		marginTop: 40,
 		borderRadius: 40,
@@ -88,17 +91,20 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 100,
 		paddingVertical: 16,
 		alignItems: 'center',
-	},
-	text: {
-		fontFamily: 'Inter',
-		fontSize: 20,
-		fontWeight: 600,
+		width: '70%',
 	},
 	titleSing: {
 		fontFamily: 'Inter',
 		fontSize: 14,
 		fontWeight: 700,
-		color: '#000000',
+		color: '#4D1717',
+	},
+	textInfo: {
+		width: '90%',
+		marginLeft: 20,
+		fontFamily: 'Inter',
+		fontSize: 14,
+		fontWeight: 300,
+		color: '#AAA8A8',
 	},
 })
-export default Detail

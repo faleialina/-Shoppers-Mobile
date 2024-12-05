@@ -29,7 +29,7 @@ function Products() {
 						style={{ flexDirection: 'row', justifyContent: 'space-between' }}
 					>
 						<Text style={styles.textTotal}>Total :</Text>
-						<Text style={styles.textTotal}>Rs.40000.00</Text>
+						<Text style={styles.textTotal}>Rs.  {arrBascet.reduce((sum, el: any) => sum + el.price, 0)}</Text>
 					</View>
 				</View>
 
