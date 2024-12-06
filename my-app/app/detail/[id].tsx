@@ -1,7 +1,7 @@
 import ImgBack from '@/assets/images/ImgBack'
 import Product from '@/assets/images/Product'
 import Share from '@/assets/images/Share'
-import arrBascet from '@/storage/bascet'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useLocalSearchParams, useRouter } from 'expo-router/build/hooks'
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -15,11 +15,19 @@ export default function Detail() {
 	useEffect(() => {
 		const filterStorage = storage.filter(el => el.id == params.id)
 		setProduct(filterStorage)
-	}, [])
+	}, [params.id])
 
-	const addBascet = () => {
-		arrBascet.push(product[0])
-		router.replace('/(tabs)/cart')
+	const addBascet = async () => {
+		try {
+			const gettingData: any = await AsyncStorage.getItem('prod')
+			const products = JSON.parse(gettingData)
+			products.push(product[0])
+			await AsyncStorage.setItem('prod', JSON.stringify(products))
+			console.log('success')
+			router.replace('/(tabs)/cart')
+		} catch (error: any) {
+			console.error(error.message)
+		}
 	}
 
 	return (

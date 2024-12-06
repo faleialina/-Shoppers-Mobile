@@ -1,17 +1,30 @@
 import Product from '@/assets/images/Product'
 import Header from '@/components/header'
-import arrBascet from '@/storage/bascet'
-import React from 'react'
+import { iProducts } from '@/interfaces'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 function Products() {
+	const [cart, setCart] = useState<iProducts[]>([])
+
+	const loadCart = async () => {
+		const gettingItem = await AsyncStorage.getItem('prod')
+		if (!gettingItem) return
+		const parsedGwttingItem = JSON.parse(gettingItem)
+		setCart(parsedGwttingItem)
+		console.log('ok get', parsedGwttingItem)
+	}
+	useEffect(() => {
+		loadCart()
+	}, [])
 	return (
 		<View style={{ flex: 1, alignItems: 'center', gap: 62 }}>
 			<Header />
 
 			<View style={{ width: '80%', gap: 62 }}>
 				<View style={{ gap: 40, flexWrap: 'wrap', justifyContent: 'center' }}>
-					{arrBascet.map(el => (
+					{cart.map(el => (
 						<View key={el.id} style={styles.item}>
 							<Product width={136} height={117} />
 							<View style={{ gap: 13 }}>
@@ -29,7 +42,9 @@ function Products() {
 						style={{ flexDirection: 'row', justifyContent: 'space-between' }}
 					>
 						<Text style={styles.textTotal}>Total :</Text>
-						<Text style={styles.textTotal}>Rs.  {arrBascet.reduce((sum, el: any) => sum + el.price, 0)}</Text>
+						<Text style={styles.textTotal}>
+							Rs. {cart.reduce((sum, el: any) => sum + el.price, 0)}
+						</Text>
 					</View>
 				</View>
 
