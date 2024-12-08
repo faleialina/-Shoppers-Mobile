@@ -20,7 +20,7 @@ export default function Detail() {
 	const addBascet = async () => {
 		try {
 			const gettingData: any = await AsyncStorage.getItem('prod')
-			const products = JSON.parse(gettingData)
+			const products = JSON.parse(gettingData) || []
 			products.push(product[0])
 			await AsyncStorage.setItem('prod', JSON.stringify(products))
 			console.log('success')

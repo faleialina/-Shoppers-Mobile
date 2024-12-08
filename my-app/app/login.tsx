@@ -26,7 +26,7 @@ export default function Login() {
 			if (!user.email || !user.password) throw new Error('пустое значение')
 			if (user.password.length < 8) throw new Error('пароль менее 8 символов')
 				console.log(user)
-			router.push('/products')
+			router.push('/(tabs)/user')
 		} catch (error: any) {
 			console.error(error.message)
 		}

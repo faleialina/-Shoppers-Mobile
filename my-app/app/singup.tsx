@@ -1,4 +1,4 @@
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
 	StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 export default function Singup() {
+	const router = useRouter()
 	const inputElems = [
 		{ label: 'Name', value: 'name', isSecure: false },
 		{ label: 'Username', value: 'email', isSecure: false },
@@ -56,7 +57,7 @@ export default function Singup() {
 					))}
 
 					<TouchableOpacity
-						onPress={() => console.log(user)}
+						onPress={() => router.push('/login')}
 						style={styles.btn}
 					>
 						<Text style={styles.titleSing}>SIGN IN</Text>
