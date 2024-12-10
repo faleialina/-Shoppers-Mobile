@@ -1,3 +1,4 @@
+import DeleteImg from '@/assets/images/DeleteImg'
 import Product from '@/assets/images/Product'
 import Header from '@/components/header'
 import { iProducts } from '@/interfaces'
@@ -15,6 +16,25 @@ function Products() {
 		setCart(parsedGwttingItem)
 		console.log('ok get', parsedGwttingItem)
 	}
+
+	const deleteFromBasket = async (index: number) => {
+		try {
+			const gettingData = await AsyncStorage.getItem('prod')
+			if (!gettingData) return
+			const parsedGettingData = JSON.parse(gettingData)
+			if (Array.isArray(parsedGettingData)) {
+				const newArray = [
+					...parsedGettingData.slice(0, index),
+					...parsedGettingData.slice(index + 1),
+				]
+				await AsyncStorage.setItem('prod', JSON.stringify(newArray))
+				setCart(newArray)
+			}
+		} catch (error: any) {
+			console.error(error.message)
+		}
+	}
+
 	useEffect(() => {
 		loadCart()
 	}, [])
@@ -24,7 +44,7 @@ function Products() {
 
 			<View style={{ width: '80%', gap: 62 }}>
 				<View style={{ gap: 40, flexWrap: 'wrap', justifyContent: 'center' }}>
-					{cart.map(el => (
+					{cart.map((el, index) => (
 						<View key={el.id} style={styles.item}>
 							<Product width={136} height={117} />
 							<View style={{ gap: 13 }}>
@@ -32,6 +52,12 @@ function Products() {
 								<Text style={styles.textSmall}>Qty: 1</Text>
 								<Text style={styles.text}>Rs. {el?.price}</Text>
 							</View>
+							<TouchableOpacity
+								onPress={() => deleteFromBasket(index)}
+								style={{ position: 'absolute', top: 15, right: 15 }}
+							>
+								<DeleteImg />
+							</TouchableOpacity>
 						</View>
 					))}
 				</View>
