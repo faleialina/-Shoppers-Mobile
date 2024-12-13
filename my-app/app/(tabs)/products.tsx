@@ -1,4 +1,3 @@
-import Product from '@/assets/images/Product'
 import Header from '@/components/header'
 import { iProducts } from '@/interfaces'
 import { useRouter } from 'expo-router'
@@ -23,7 +22,8 @@ function Products() {
 						style={styles.item}
 						onPress={() => router.replace(`/detail/${el.id}`)}
 					>
-						<Product width={'100%'} height={112} />
+						{el.img}
+
 						<Text>{el?.title}</Text>
 						<Text>{el?.price}</Text>
 					</TouchableOpacity>
@@ -34,8 +34,7 @@ function Products() {
 }
 const styles = StyleSheet.create({
 	item: {
-		width: '35%',
-		padding: 15,
+		width: 134,
 		height: 169,
 		borderRadius: 30,
 		shadowColor: '#000',

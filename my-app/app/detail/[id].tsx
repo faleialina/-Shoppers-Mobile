@@ -21,7 +21,7 @@ export default function Detail() {
 		try {
 			const gettingData: any = await AsyncStorage.getItem('prod')
 			const products = JSON.parse(gettingData) || []
-			products.push(product[0])
+			products.push({...product[0],img: ''})
 			await AsyncStorage.setItem('prod', JSON.stringify(products))
 			console.log('success')
 			router.replace('/(tabs)/cart')
@@ -34,7 +34,8 @@ export default function Detail() {
 		<>
 			<View style={{ gap: 40, alignItems: 'center' }}>
 				<View>
-					<Product width={'100%'} height={390} />
+					{/* <Product width={'100%'} height={390} /> */}
+					{product[0]?.img}
 					<View
 						style={{
 							position: 'absolute',

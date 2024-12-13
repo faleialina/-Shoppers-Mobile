@@ -4,7 +4,14 @@ import Header from '@/components/header'
 import { iProducts } from '@/interfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
+import storage from '../../storage/index'
 
 function Products() {
 	const [cart, setCart] = useState<iProducts[]>([])
@@ -12,9 +19,24 @@ function Products() {
 	const loadCart = async () => {
 		const gettingItem = await AsyncStorage.getItem('prod')
 		if (!gettingItem) return
+		console.log(gettingItem)
 		const parsedGwttingItem = JSON.parse(gettingItem)
 		setCart(parsedGwttingItem)
 		console.log('ok get', parsedGwttingItem)
+
+		if (Array.isArray(parsedGwttingItem)) {
+			const res =[]
+			for (let i = 0; i < storage.length; i++) {
+				for (let j = 0; j < parsedGwttingItem.length; j++) {
+					if (storage[i].id==parsedGwttingItem[j].id) {
+						res.push(storage[i])
+					}
+					
+				}
+				
+			}
+			setCart(res)
+		}
 	}
 
 	const deleteFromBasket = async (index: number) => {
@@ -42,11 +64,20 @@ function Products() {
 		<View style={{ flex: 1, alignItems: 'center', gap: 62 }}>
 			<Header />
 
-			<View style={{ width: '80%', gap: 62 }}>
-				<View style={{ gap: 40, flexWrap: 'wrap', justifyContent: 'center' }}>
+			<ScrollView style={{ width: '100%' }}>
+				<View
+					style={{
+						gap: 40,
+						flexWrap: 'wrap',
+						justifyContent: 'center',
+						width: '90%',
+						marginLeft: '5%',
+					}}
+				>
 					{cart.map((el, index) => (
 						<View key={el.id} style={styles.item}>
-							<Product width={136} height={117} />
+							{el?.img}
+							{/* <Product width={136} height={117} /> */}
 							<View style={{ gap: 13 }}>
 								<Text style={styles.text}>{el?.title}</Text>
 								<Text style={styles.textSmall}>Qty: 1</Text>
@@ -62,7 +93,14 @@ function Products() {
 					))}
 				</View>
 
-				<View style={{ gap: 29 }}>
+				<View
+					style={{
+						gap: 29,
+						marginVertical: 62,
+						width: '90%',
+						marginLeft: '5%',
+					}}
+				>
 					<View style={styles.vector} />
 					<View
 						style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -78,7 +116,7 @@ function Products() {
 					{' '}
 					<Text style={styles.titleSing}>CHECKOUT</Text>{' '}
 				</TouchableOpacity>
-			</View>
+			</ScrollView>
 		</View>
 	)
 }
@@ -89,9 +127,12 @@ const styles = StyleSheet.create({
 		borderRadius: 40,
 		backgroundColor: '#F9EF05',
 		alignContent: 'center',
-		paddingHorizontal: 100,
+		paddingHorizontal: 10,
 		paddingVertical: 16,
 		alignItems: 'center',
+		width: '90%',
+		marginLeft: '5%',
+		marginBottom: 50,
 	},
 	titleSing: {
 		fontFamily: 'Inter',
