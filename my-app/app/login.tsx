@@ -25,8 +25,8 @@ export default function Login() {
 		try {
 			if (!user.email || !user.password) throw new Error('пустое значение')
 			if (user.password.length < 8) throw new Error('пароль менее 8 символов')
-				console.log(user)
-			router.push('/(tabs)/user')
+			console.log(user)
+			router.push(`/(tabs)/user?name=${encodeURIComponent(user.email)}`)
 		} catch (error: any) {
 			console.error(error.message)
 		}
@@ -64,13 +64,8 @@ export default function Login() {
 							/>
 						</View>
 					))}
-					<TouchableOpacity
-						style={styles.btn}
-						onPress={authentication}
-					>
-						<Text style={styles.titleSing} >
-							SIGN IN
-						</Text>
+					<TouchableOpacity style={styles.btn} onPress={authentication}>
+						<Text style={styles.titleSing}>SIGN IN</Text>
 					</TouchableOpacity>
 				</View>
 

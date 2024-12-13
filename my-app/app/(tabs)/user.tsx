@@ -1,22 +1,23 @@
 import Header from '@/components/header'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-function Products() {
+function User() {
 	const router = useRouter()
+	const params = useLocalSearchParams()
+	const username = params.name || 'User'
 
 	return (
 		<View style={{ gap: '30%', flex: 1 }}>
 			<Header />
 			<View style={styles.wrapper}>
-				<Text style={styles.text}>Hello SIlva</Text>
+				<Text style={styles.text}>Hello {username}</Text>
 				<TouchableOpacity
 					style={styles.btn}
 					onPress={() => router.replace('/')}
 				>
-					{' '}
-					<Text style={styles.titleSing}>SIGN OUT</Text>{' '}
+					<Text style={styles.titleSing}>SIGN OUT</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
 		borderRadius: 40,
 		backgroundColor: '#F9EF05',
 		alignContent: 'center',
-		paddingHorizontal: 100,
+		width: 269,
 		paddingVertical: 16,
 		alignItems: 'center',
 	},
@@ -52,4 +53,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Products
+export default User

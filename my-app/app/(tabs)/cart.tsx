@@ -1,5 +1,4 @@
 import DeleteImg from '@/assets/images/DeleteImg'
-import Product from '@/assets/images/Product'
 import Header from '@/components/header'
 import { iProducts } from '@/interfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -13,7 +12,7 @@ import {
 } from 'react-native'
 import storage from '../../storage/index'
 
-function Products() {
+function Cart() {
 	const [cart, setCart] = useState<iProducts[]>([])
 
 	const loadCart = async () => {
@@ -25,15 +24,13 @@ function Products() {
 		console.log('ok get', parsedGwttingItem)
 
 		if (Array.isArray(parsedGwttingItem)) {
-			const res =[]
+			const res = []
 			for (let i = 0; i < storage.length; i++) {
 				for (let j = 0; j < parsedGwttingItem.length; j++) {
-					if (storage[i].id==parsedGwttingItem[j].id) {
+					if (storage[i].id == parsedGwttingItem[j].id) {
 						res.push(storage[i])
 					}
-					
 				}
-				
 			}
 			setCart(res)
 		}
@@ -43,14 +40,22 @@ function Products() {
 		try {
 			const gettingData = await AsyncStorage.getItem('prod')
 			if (!gettingData) return
-			const parsedGettingData = JSON.parse(gettingData)
+			const parsedGettingData = (gettingData && JSON.parse(gettingData)) || []
 			if (Array.isArray(parsedGettingData)) {
 				const newArray = [
 					...parsedGettingData.slice(0, index),
 					...parsedGettingData.slice(index + 1),
 				]
 				await AsyncStorage.setItem('prod', JSON.stringify(newArray))
-				setCart(newArray)
+				const result = []
+				for (let i = 0; i < storage.length; i++) {
+					for (let a = 0; a < newArray.length; a++) {
+						if (storage[i].id == newArray[a].id) {
+							result.push(storage[i])
+						}
+					}
+				}
+				setCart(result)
 			}
 		} catch (error: any) {
 			console.error(error.message)
@@ -76,19 +81,24 @@ function Products() {
 				>
 					{cart.map((el, index) => (
 						<View key={el.id} style={styles.item}>
-							{el?.img}
-							{/* <Product width={136} height={117} /> */}
+							{el?.img
+								? React.cloneElement(el.img, {
+										width: 136,
+										height: 117,
+										style: { borderRadius: 25 },
+								  })
+								: null}
+
 							<View style={{ gap: 13 }}>
 								<Text style={styles.text}>{el?.title}</Text>
 								<Text style={styles.textSmall}>Qty: 1</Text>
 								<Text style={styles.text}>Rs. {el?.price}</Text>
 							</View>
-							<TouchableOpacity
-								onPress={() => deleteFromBasket(index)}
-								style={{ position: 'absolute', top: 15, right: 15 }}
-							>
-								<DeleteImg />
-							</TouchableOpacity>
+							<View>
+								<TouchableOpacity onPress={() => deleteFromBasket(index)}>
+									<DeleteImg />
+								</TouchableOpacity>
+							</View>
 						</View>
 					))}
 				</View>
@@ -113,8 +123,7 @@ function Products() {
 				</View>
 
 				<TouchableOpacity style={styles.btn}>
-					{' '}
-					<Text style={styles.titleSing}>CHECKOUT</Text>{' '}
+					<Text style={styles.titleSing}>CHECKOUT</Text>
 				</TouchableOpacity>
 			</ScrollView>
 		</View>
@@ -142,7 +151,7 @@ const styles = StyleSheet.create({
 	},
 	item: {
 		flexDirection: 'row',
-		gap: 40,
+		gap: 50,
 		alignItems: 'center',
 		borderRadius: 30,
 		shadowColor: '#000',
@@ -182,4 +191,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Products
+export default Cart

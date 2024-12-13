@@ -20,12 +20,15 @@ function Products() {
 				{storage.map((el: iProducts) => (
 					<TouchableOpacity
 						style={styles.item}
+						key={el.id}
 						onPress={() => router.replace(`/detail/${el.id}`)}
 					>
 						{el.img}
 
-						<Text>{el?.title}</Text>
-						<Text>{el?.price}</Text>
+						<Text style={{ textAlign: 'center', marginTop: 10 }}>
+							{el?.title}
+						</Text>
+						<Text style={{ textAlign: 'center' }}>{el?.price}</Text>
 					</TouchableOpacity>
 				))}
 			</View>

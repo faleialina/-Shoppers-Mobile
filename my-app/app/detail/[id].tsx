@@ -1,9 +1,8 @@
 import ImgBack from '@/assets/images/ImgBack'
-import Product from '@/assets/images/Product'
 import Share from '@/assets/images/Share'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useLocalSearchParams, useRouter } from 'expo-router/build/hooks'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import storage from '../../storage/index'
 
@@ -21,7 +20,7 @@ export default function Detail() {
 		try {
 			const gettingData: any = await AsyncStorage.getItem('prod')
 			const products = JSON.parse(gettingData) || []
-			products.push({...product[0],img: ''})
+			products.push({ ...product[0], img: '' })
 			await AsyncStorage.setItem('prod', JSON.stringify(products))
 			console.log('success')
 			router.replace('/(tabs)/cart')
@@ -32,13 +31,10 @@ export default function Detail() {
 
 	return (
 		<>
-			<View style={{ gap: 40, alignItems: 'center' }}>
+			<View style={{ gap: 15, alignItems: 'center' }}>
 				<View>
-					{/* <Product width={'100%'} height={390} /> */}
-					{product[0]?.img}
 					<View
 						style={{
-							position: 'absolute',
 							flexDirection: 'row',
 							justifyContent: 'space-between',
 							width: '90%',
@@ -52,11 +48,15 @@ export default function Detail() {
 						<Share />
 					</View>
 				</View>
+				<View>
+					{product[0]?.img
+						? React.cloneElement(product[0].img, { height: 390 })
+						: null}
+				</View>
 
 				<View
 					style={{
 						gap: 14,
-						marginBottom: 30,
 						width: '80%',
 						alignSelf: 'center',
 					}}
@@ -66,8 +66,7 @@ export default function Detail() {
 				</View>
 
 				<TouchableOpacity style={styles.btn} onPress={addBascet}>
-					{' '}
-					<Text style={styles.titleSing}>Add to Cart</Text>{' '}
+					<Text style={styles.titleSing}>Add to Cart</Text>
 				</TouchableOpacity>
 
 				<View style={{ width: '90%', gap: 16 }}>
@@ -93,11 +92,10 @@ const styles = StyleSheet.create({
 		fontWeight: 600,
 	},
 	btn: {
-		marginTop: 40,
+		marginTop: 10,
 		borderRadius: 40,
 		backgroundColor: '#F9EF05',
 		alignContent: 'center',
-		paddingHorizontal: 100,
 		paddingVertical: 16,
 		alignItems: 'center',
 		width: '70%',
