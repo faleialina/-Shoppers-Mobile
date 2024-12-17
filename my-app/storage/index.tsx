@@ -7,37 +7,37 @@ const obj: iProducts[] = [
 	{
 		id: 1,
 		title: 'Adidas Shoe',
-		price: 20000,
+		price: 10000,
 		img: <Product width={'100%'} height={112} />,
 	},
 	{
 		id: 2,
 		title: 'Smart Watch',
-		price: 5000,
+		price: 20000,
 		img: <Product2 width={'100%'} height={112}  />,
 	},
 	{
 		id: 3,
 		title: 'Adidas Shoe',
-		price: 20000,
+		price: 30000,
 		img: <Product3 width={'100%'} height={112}  />,
 	},
 	{
 		id: 4,
 		title: 'Adidas Shoe',
-		price: 20000,
+		price: 40000,
 		img: <Product3 width={'100%'} height={112}  />,
 	},
 	{
 		id: 5,
 		title: 'Adidas Shoe',
-		price: 20000,
+		price: 50000,
 		img: <Product3 width={'100%'} height={112}  />,
 	},
 	{
 		id: 6,
 		title: 'Adidas Shoe',
-		price: 20000,
+		price: 60000,
 		img: <Product3 width={'100%'} height={112}  />,
 	},
 ]
