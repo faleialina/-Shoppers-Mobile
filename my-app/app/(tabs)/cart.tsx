@@ -16,49 +16,42 @@ function Cart() {
 	const [cart, setCart] = useState<iProducts[]>([])
 
 	const loadCart = async () => {
-		const gettingItem = await AsyncStorage.getItem('prod')
-		if (!gettingItem) return
-		console.log(gettingItem)
-		const parsedGwttingItem = JSON.parse(gettingItem)
-		setCart(parsedGwttingItem)
-		console.log('ok get', parsedGwttingItem)
+		const exitingProducts = await AsyncStorage.getItem('prod')
+		const parsed = (exitingProducts && JSON.parse(exitingProducts)) || []
+		const result: iProducts[] = []
 
-		if (Array.isArray(parsedGwttingItem)) {
-			const res = []
-			for (let i = 0; i < storage.length; i++) {
-				for (let j = 0; j < parsedGwttingItem.length; j++) {
-					if (storage[i].id == parsedGwttingItem[j].id) {
-						res.push(storage[i])
-					}
+		parsed.forEach((parsedItem: iProducts) => {
+			const existingProduct = result.find(item => item.id === parsedItem.id)
+			if (existingProduct) {
+				existingProduct.Qty += parsedItem.Qty
+			} else {
+				const productToAdd = storage.find(item => item.id === parsedItem.id)
+				if (productToAdd) {
+					result.push({ ...productToAdd, Qty: parsedItem.Qty })
 				}
 			}
-			setCart(res)
-		}
+		})
+
+		setCart(result)
+		console.log(result)
 	}
 
-	const deleteFromBasket = async (index: number) => {
+	const deleteFromCart = async (index: number) => {
+		const updatedCart = cart.filter((_, i) => i !== index)
+
+		setCart(updatedCart)
+
+		const simplifiedCart = updatedCart.map(({ id, Qty, title, price }) => ({
+			id,
+			Qty,
+			title,
+			price,
+		}))
+
 		try {
-			const gettingData = await AsyncStorage.getItem('prod')
-			if (!gettingData) return
-			const parsedGettingData = (gettingData && JSON.parse(gettingData)) || []
-			if (Array.isArray(parsedGettingData)) {
-				const newArray = [
-					...parsedGettingData.slice(0, index),
-					...parsedGettingData.slice(index + 1),
-				]
-				await AsyncStorage.setItem('prod', JSON.stringify(newArray))
-				const result = []
-				for (let i = 0; i < storage.length; i++) {
-					for (let a = 0; a < newArray.length; a++) {
-						if (storage[i].id == newArray[a].id) {
-							result.push(storage[i])
-						}
-					}
-				}
-				setCart(result)
-			}
-		} catch (error: any) {
-			console.error(error.message)
+			await AsyncStorage.setItem('prod', JSON.stringify(simplifiedCart))
+		} catch (error) {
+			console.error('Ошибка при сохранении в AsyncStorage:', error)
 		}
 	}
 
@@ -91,11 +84,11 @@ function Cart() {
 
 							<View style={{ gap: 13 }}>
 								<Text style={styles.text}>{el?.title}</Text>
-								<Text style={styles.textSmall}>Qty: 1</Text>
+								<Text style={styles.textSmall}>Qty: {el?.Qty}</Text>
 								<Text style={styles.text}>Rs. {el?.price}</Text>
 							</View>
 							<View>
-								<TouchableOpacity onPress={() => deleteFromBasket(index)}>
+								<TouchableOpacity onPress={() => deleteFromCart(index)}>
 									<DeleteImg />
 								</TouchableOpacity>
 							</View>
@@ -117,7 +110,7 @@ function Cart() {
 					>
 						<Text style={styles.textTotal}>Total :</Text>
 						<Text style={styles.textTotal}>
-							Rs. {cart.reduce((sum, el: any) => sum + el.price, 0)}
+							Rs. {cart.reduce((sum, el: any) => sum + el.price * el.Qty, 0)}
 						</Text>
 					</View>
 				</View>
